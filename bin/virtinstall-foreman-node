@@ -1,0 +1,29 @@
+#!/bin/bash
+
+BOOTNET=192.168.203
+VM_NAME=foremancd
+KS_URL=
+if [ "$1" = "--proxy" ]
+then
+KS_URL=
+fi
+
+
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+virsh list | grep "[[:space:]]$VM_NAME[[:space:]]" | awk '{print $1}' | while read n; do virsh destroy $n; done && virsh undefine $VM_NAME
+
+sed -i s/.*192.168.200.20.*// ~/.ssh/known_hosts
+sed -i s/.*$VM_NAME.*// ~/.ssh/known_hosts
+
+virt-install --connect qemu:///system --virt-type kvm --name $VM_NAME --ram 2048 \
+      --disk pool=poolio,size=40 \
+      --network network=foreman_public \
+      --network network=foreman_pxe \
+      --graphics vnc \
+      --location http://download.devel.redhat.com/released/RHEL-6/6.4/Server/x86_64/os/ \
+      --os-variant rhel6 \
+      --extra-args "ks=$KS_URL ksdevice=eth0 gateway=$BOOTNET.1 ip=$BOOTNET.20 netmask=255.255.255.0 dns=$BOOTNET.1"

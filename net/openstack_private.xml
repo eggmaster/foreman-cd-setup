@@ -1,0 +1,8 @@
+<network connections='1'>
+  <name>openstack_private</name>
+  <forward mode='nat'/>
+  <mac address='52:54:00:A5:C2:88'/>
+  <ip address='192.168.200.1' netmask='255.255.255.0'>
+  </ip>
+</network>
+
