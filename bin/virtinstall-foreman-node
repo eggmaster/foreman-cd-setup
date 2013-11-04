@@ -1,11 +1,10 @@
 #!/bin/bash
 
-BOOTNET=192.168.203
-VM_NAME=foremancd
-KS_URL=
+KS_URL=https://raw.github.com/eggmaster/foreman-cd-setup/master/kickstarts/astapor-provision-noproxy.cfg
 if [ "$1" = "--proxy" ]
 then
-KS_URL=
+KS_URL=https://raw.github.com/eggmaster/foreman-cd-setup/master/kickstarts/astapor-provision-proxy.cfg
+iptables -I INPUT 1 -p tcp --dport 3128 --src $FOREMAN_PUB.0/24 -j ACCEPT
 fi
 
 
@@ -16,9 +15,6 @@ fi
 
 virsh list | grep "[[:space:]]$VM_NAME[[:space:]]" | awk '{print $1}' | while read n; do virsh destroy $n; done && virsh undefine $VM_NAME
 
-sed -i s/.*192.168.200.20.*// ~/.ssh/known_hosts
-sed -i s/.*$VM_NAME.*// ~/.ssh/known_hosts
-
 virt-install --connect qemu:///system --virt-type kvm --name $VM_NAME --ram 2048 \
       --disk pool=poolio,size=40 \
       --network network=foreman_public \
@@ -26,4 +22,4 @@ virt-install --connect qemu:///system --virt-type kvm --name $VM_NAME --ram 2048
       --graphics vnc \
       --location http://download.devel.redhat.com/released/RHEL-6/6.4/Server/x86_64/os/ \
       --os-variant rhel6 \
-      --extra-args "ks=$KS_URL ksdevice=eth0 gateway=$BOOTNET.1 ip=$BOOTNET.20 netmask=255.255.255.0 dns=$BOOTNET.1"
+      --extra-args "ks=$KS_URL ksdevice=eth0 gateway=$FOREMAN_PUB.1 ip=$FOREMAN_PUB.20 netmask=255.255.255.0 dns=$FOREMAN_PUB.1"
