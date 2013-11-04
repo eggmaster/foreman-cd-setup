@@ -1,7 +1,6 @@
 <network connections='1'>
   <name>foreman_pxe</name>
   <forward mode='nat'/>
-  <mac address='52:54:00:A5:C2:72'/>
   <ip address='192.168.202.1' netmask='255.255.255.0'>
   </ip>
 </network>
