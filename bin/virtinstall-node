@@ -6,8 +6,7 @@ virt-install --connect qemu:///system --virt-type kvm --name $VMNAME --ram 2048 
       --disk pool=poolio,size=30 \
       --network network=openstack_private \
       --network network=openstack_public \
-      --network network=default \
+      --network bridge=br0 \
       --graphics vnc \
       --pxe
-
 
