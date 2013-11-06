@@ -1,6 +1,7 @@
 <network connections='1'>
   <name>foreman_pxe</name>
   <forward mode='nat'/>
+  <bridge name="foobr" stp="on" delay="0" />
   <ip address='192.168.202.1' netmask='255.255.255.0'>
   </ip>
 </network>
