@@ -13,7 +13,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-virsh list | grep "[[:space:]]$VM_NAME[[:space:]]" | awk '{print $1}' | while read n; do virsh destroy $n; done && virsh undefine $VM_NAME
+virsh list | grep "[[:space:]]$VM_NAME[[:space:]]" | awk '{print $1}' | while read n; do virsh destroy $n; done && virsh undefine $VM_NAME --remove-all-storage
 
 virt-install --connect qemu:///system --virt-type kvm --name $VM_NAME --ram 2048 \
       --disk pool=poolio,size=40 \
