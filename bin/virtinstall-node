@@ -4,7 +4,7 @@ VMNAME=openstackcd_`date +%m%d%H%M`
 
 virt-install --connect qemu:///system --virt-type kvm --name $VMNAME --ram 2048 \
       --disk pool=poolio,size=30 \
-      --network network=foreman_pxe \
+      --network network=foreman_pxe,mac=52:54:00:99:73:d1 \
       --network network=openstack_private \
       --network network=openstack_public \
       --graphics vnc \
