@@ -1,12 +1,11 @@
 #!/bin/bash
 
-KS_URL=https://raw.github.com/eggmaster/foreman-cd-setup/master/kickstarts/astapor-provision-noproxy.cfg
-if [ "$1" = "--proxy" ]
+if [ -e ../env.sh ]
 then
-KS_URL=https://raw.github.com/eggmaster/foreman-cd-setup/master/kickstarts/astapor-provision-proxy.cfg
-iptables -I INPUT 1 -p tcp --dport 3128 --src $FOREMAN_PUB.0/24 -j ACCEPT
+    source ../env.sh
 fi
 
+KS_URL=https://raw.github.com/eggmaster/foreman-cd-setup/master/kickstarts/astapor-provision-proxy.cfg
 
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 1>&2
@@ -22,4 +21,4 @@ virt-install --connect qemu:///system --virt-type kvm --name $VM_NAME --ram 2048
       --graphics vnc \
       --location http://download.devel.redhat.com/released/RHEL-6/6.4/Server/x86_64/os/ \
       --os-variant rhel6 \
-      --extra-args "ks=$KS_URL ksdevice=eth0 gateway=$FOREMAN_PUB.1 ip=$FOREMAN_PUB.20 netmask=255.255.255.0 dns=$FOREMAN_PUB.1 noverifyssl"
+      --extra-args "ks=$KS_URL ksdevice=eth0 gateway=$FOREMAN_PUB.1 ip=$FOREMAN_PUB.20 netmask=255.255.255.0 dns=$FOREMAN_PUB.1 noverifyssl FOREMAN_PUB=$FOREMAN_PUB FOREMAN_PXE=$FOREMAN_PXE OPENSTACK_PRI=$OPENSTACK_PRI OPENSTACK_PUB=$OPENSTACK_PUB FOREMAN_HOSTNAME=$FOREMAN_HOSTNAME OPENSTACK_HOSTNAME=$OPENSTACK_HOSTNAME"
