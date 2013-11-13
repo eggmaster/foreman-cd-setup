@@ -17,7 +17,8 @@ virsh list | grep "[[:space:]]$VM_NAME[[:space:]]" | awk '{print $1}' | while re
 virt-install --connect qemu:///system --virt-type kvm --name $VM_NAME --ram 2048 \
       --disk pool=poolio,size=40 \
       --network network=foreman_public \
-      --network network=foreman_pxe \
+      --network network=openstack_public \
+      --network network=openstack_private \
       --graphics vnc \
       --location http://download.devel.redhat.com/released/RHEL-6/6.4/Server/x86_64/os/ \
       --os-variant rhel6 \
