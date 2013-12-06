@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ -e ../env.sh ]
+then
+    source ../env.sh
+fi
+
+for image in $IMAGE_LIST; do
+
+#Disk Image location
+diskimage=/var/lib/libvirt/$image
+
+#Create the qcow2 disk image with preallocation and 'facllocate'(which pre-allocates all the blocks to a file) it for max. performance
+echo "Creating qcow2 disk image.."
+qemu-img create -f qcow2 -o preallocation=metadata $diskimage 40G
+fallocate -l `ls -al $diskimage | awk '{print $5}'` $diskimage
+echo `ls -lash $diskimage`
+
+done

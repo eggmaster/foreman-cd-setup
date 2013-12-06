@@ -8,3 +8,4 @@ export FOREMAN_HOSTNAME=foremancd.cdnet
 export OPENSTACK_HOSTNAME=openstack.cdnet
 export PACKSTACK_HOSTNAME=packstack.cdnet
 export VM_NAME=foremancd
+export IMAGE_LIST="foremancd os_controller os_compute os_networker"
